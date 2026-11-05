@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apartaestudio en 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a render-viewer at night: dark stage so the frames glow, sea-teal for progress, sun-gold for highlights. */
+:root {
+  --bg: #0d1214;
+  --panel: #151d20;
+  --line: #24312f;
+  --text: #e9e4da;
+  --muted: #9aa5a1;
+  --sea: #3cc0ae;
+  --sun: #e8b25c;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font: 16px/1.6 var(--body); }
+img, video { max-width: 100%; display: block; }
+a { color: var(--sea); }
+:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; line-height: 1.1; margin: 0; }
+h1 { font-size: clamp(2.2rem, 5.5vw, 4rem); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.6rem, 3.2vw, 2.3rem); letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 500; }
+p { margin: 0; max-width: 65ch; }
+.mono { font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.02em; color: var(--muted); }
+section { padding: 72px 0 0; display: grid; gap: 28px; }
+.lede { color: var(--muted); font-size: 1.1rem; }
+
+/* hero */
+header { padding: 48px 0 0; display: grid; gap: 24px; }
+.hero-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; align-items: end; }
+.player { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+.player video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.specs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.spec { background: var(--panel); padding: 16px; display: grid; gap: 4px; }
+.spec b { font-family: var(--display); font-size: 1.9rem; font-weight: 700; color: var(--sun); font-variant-numeric: tabular-nums; line-height: 1; }
+.spec span { color: var(--muted); font-size: 0.88rem; }
+
+/* evolution */
+.timeline { display: grid; gap: 16px; grid-template-columns: repeat(5, 1fr); }
+.stage { display: grid; gap: 10px; align-content: start; }
+.stage figure { margin: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 16 / 10; }
+.stage img { width: 100%; height: 100%; object-fit: cover; }
+.stage .step { display: flex; align-items: center; gap: 8px; }
+.stage .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--sea); flex: none; }
+.stage.final .dot { background: var(--sun); box-shadow: 0 0 0 4px rgba(232, 178, 92, 0.2); }
+.stage p { font-size: 0.9rem; color: var(--muted); }
+.bar { height: 2px; background: linear-gradient(90deg, var(--sea), var(--sun)); border-radius: 2px; }
+
+/* fixes */
+.fixes { display: grid; gap: 20px; }
+.fix { display: grid; grid-template-columns: 1fr 1fr 0.9fr; gap: 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.fix figure { margin: 0; display: grid; gap: 6px; }
+.fix figure img { border-radius: 6px; aspect-ratio: 16 / 9; object-fit: cover; width: 100%; }
+.tag { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.tag.before { color: #d9826b; }
+.tag.after { color: var(--sea); }
+.fix .txt { display: grid; gap: 8px; }
+.fix .txt p { font-size: 0.93rem; color: var(--muted); }
+
+/* gallery */
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.strip figure { margin: 0; position: relative; border-radius: 6px; overflow: hidden; }
+.strip img { aspect-ratio: 16 / 9; object-fit: cover; width: 100%; }
+.strip figcaption { position: absolute; left: 8px; bottom: 6px; font-family: var(--mono); font-size: 0.72rem; color: #fff; background: rgba(0, 0, 0, 0.55); padding: 2px 6px; border-radius: 4px; }
+
+/* pipeline */
+.pipe { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.pipe div { padding: 18px 16px; background: var(--panel); border-right: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+.pipe div:last-child { border-right: 0; }
+.pipe b { font-family: var(--display); font-weight: 500; }
+.pipe p { font-size: 0.88rem; color: var(--muted); }
+.pipe .n { font-family: var(--mono); color: var(--sea); font-size: 0.8rem; }
+
+/* audit */
+.audit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.score { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; }
+.score .num { font-family: var(--display); font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.score .num small { font-size: 1rem; color: var(--muted); font-weight: 500; }
+.meter { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--sun); border-radius: 3px; }
+.score p { font-size: 0.9rem; color: var(--muted); }
+.next { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; padding: 0; margin: 0; list-style: none; counter-reset: n; }
+.next li { counter-increment: n; display: grid; grid-template-columns: 28px 1fr; gap: 8px; font-size: 0.95rem; }
+.next li::before { content: counter(n, decimal-leading-zero); font-family: var(--mono); color: var(--sun); font-size: 0.85rem; padding-top: 2px; }
+
+/* lessons */
+.lessons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.lesson { border-top: 2px solid var(--sea); padding-top: 12px; display: grid; gap: 6px; }
+.lesson p { font-size: 0.92rem; color: var(--muted); }
+
+footer { padding: 72px 0 48px; display: grid; gap: 8px; }
+footer p { color: var(--muted); font-size: 0.9rem; }
+
+@media (max-width: 900px) {
+  .hero-grid, .fix { grid-template-columns: 1fr; }
+  .timeline { grid-template-columns: repeat(2, 1fr); }
+  .strip { grid-template-columns: repeat(2, 1fr); }
+  .pipe { grid-template-columns: 1fr; }
+  .pipe div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .audit, .lessons { grid-template-columns: 1fr; }
+  .next { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .timeline { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="mono">7 fotos + 1 plano &rarr; recorrido 3D con Claude Code y una RTX 5060 Ti</div>
+  <h1>Un apartaestudio real, reconstruido en 3D sin escanearlo</h1>
+  <p class="lede">Claude leyó las fotos del anuncio y el plano del arquitecto, escribió el código que modela cada pared y cada mueble, comparó sus renders contra las fotos hasta acercarse, y terminó en Unreal Engine 5 con luz trazada como en cine.</p>
+  <div class="hero-grid">
+    <div class="player">
+      <video src="recorrido.mp4" poster="img/pt4_0280.jpg" controls playsinline preload="metadata" aria-label="Recorrido 3D del apartaestudio, 41 segundos"></video>
+    </div>
+    <div class="specs">
+      <div class="spec"><b>7</b><span>fotos del anuncio, ni una más</span></div>
+      <div class="spec"><b>41 s</b><span>una sola toma, a la altura de los ojos</span></div>
+      <div class="spec"><b>996</b><span>cuadros con Path Tracer</span></div>
+      <div class="spec"><b>83 min</b><span>de render en una GPU de casa</span></div>
+      <div class="spec"><b>34 m²</b><span>medidos del plano a escala 1:20</span></div>
+      <div class="spec"><b>$0</b><span>en software: Blender, Unreal y modelos gratis</span></div>
+    </div>
+  </div>
+</header>
+
+<section aria-labelledby="evo">
+  <h2 id="evo">Cómo fue mejorando</h2>
+  <div class="bar" aria-hidden="true"></div>
+  <div class="timeline">
+    <div class="stage">
+      <figure><img src="img/e1_blender_cama.jpg" alt="Primer modelo en Blender: cama, cuadros y aire acondicionado con formas simples"></figure>
+      <div class="step"><span class="dot"></span><h3>1 · Blender</h3></div>
+      <p>Paredes y muebles salen del código. La distribución ya es la real; los objetos aún son cajas.</p>
+    </div>
+    <div class="stage">
+      <figure><img src="img/e2_lumen.jpg" alt="Primera versión en Unreal Engine con luz Lumen"></figure>
+      <div class="step"><span class="dot"></span><h3>2 · Unreal Lumen</h3></div>
+      <p>El modelo pasa a Unreal Engine 5.8. Luz en tiempo real: 3 minutos por video.</p>
+    </div>
+    <div class="stage">
+      <figure><img src="img/e3_detalle.jpg" alt="Baño con baldosas de triángulos y mueble de nogal"></figure>
+      <div class="step"><span class="dot"></span><h3>3 · Detalles</h3></div>
+      <p>Cocina, baño y lavandería rehechos foto por foto: baldosas, grifería, estufa, nevera.</p>
+    </div>
+    <div class="stage">
+      <figure><img src="img/e4_pt3.jpg" alt="Primer video con Path Tracer, ya sin grano"></figure>
+      <div class="step"><span class="dot"></span><h3>4 · Path Tracer</h3></div>
+      <p>Luz calculada rayo por rayo, con denoiser de Intel. Entran sofá y palmeras de Fab.</p>
+    </div>
+    <div class="stage final">
+      <figure><img src="img/pt4_0280.jpg" alt="Versión final: cuarto con vista al balcón, el mar y cielo con nubes"></figure>
+      <div class="step"><span class="dot"></span><h3>5 · Plano secuencia</h3></div>
+      <p>Una toma continua, cielo con nubes reales, mar con oleaje y luz cálida de tarde.</p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="fixes">
+  <h2 id="fixes">Tres problemas que costaron horas</h2>
+  <div class="fixes">
+    <div class="fix">
+      <figure><span class="tag before">Antes</span><img src="img/ruido.jpg" alt="Comparación del sofá: con grano a la izquierda y con un primer intento de limpieza a la derecha"></figure>
+      <figure><span class="tag after">Después</span><img src="img/pt4_0150.jpg" alt="Cocina limpia, sin grano"></figure>
+      <div class="txt">
+        <h3>Los "puntitos" del Path Tracer</h3>
+        <p>El denoiser que trae Unreal devolvía cuadros negros en esta tarjeta. Se cambió por el de Intel (OIDN) con dos líneas de consola, y con solo 32 rayos por píxel la imagen sale limpia.</p>
+      </div>
+    </div>
+    <div class="fix">
+      <figure><span class="tag before">Antes</span><img src="img/quemado.jpg" alt="Pasillo sobreexpuesto, paredes y cama casi blancas"></figure>
+      <figure><span class="tag after">Después</span><img src="img/pt4_0020.jpg" alt="Entrada con exposición correcta y detalle en los blancos"></figure>
+      <div class="txt">
+        <h3>Todo blanco y quemado</h3>
+        <p>El render usaba las cámaras de Lumen, con 2,5 pasos de exposición de más. El Path Tracer recibió cámaras propias y los blancos recuperaron el detalle.</p>
+      </div>
+    </div>
+    <div class="fix">
+      <figure><span class="tag before">Antes</span><img src="img/e4_pt3_balcon.jpg" alt="Balcón con cielo plano y mar sin reflejos"></figure>
+      <figure><span class="tag after">Después</span><img src="img/pt4_0800.jpg" alt="Balcón con cielo de nubes y mar turquesa con el reflejo del sol"></figure>
+      <div class="txt">
+        <h3>Un cielo de verdad</h3>
+        <p>El cielo pasó a ser un domo con una foto HDR de nubes. El mar usa un mapa de olas generado por código, con reflejo del sol que se mueve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="walk">
+  <h2 id="walk">El recorrido, cuadro a cuadro</h2>
+  <div class="strip">
+    <figure><img src="img/pt4_0020.jpg" alt="Entrada con la ventana al fondo"><figcaption>00:01 entrada</figcaption></figure>
+    <figure><img src="img/pt4_0150.jpg" alt="Cocina con salpicadero de triángulos"><figcaption>00:06 cocina</figcaption></figure>
+    <figure><img src="img/pt4_0280.jpg" alt="Cuarto con vista al mar"><figcaption>00:12 cuarto</figcaption></figure>
+    <figure><img src="img/pt4_0420.jpg" alt="Baño con ducha de vidrio"><figcaption>00:18 baño</figcaption></figure>
+    <figure><img src="img/pt4_0560.jpg" alt="Cama con cuadros y lámpara"><figcaption>00:23 cama</figcaption></figure>
+    <figure><img src="img/pt4_0700.jpg" alt="Saliendo al balcón"><figcaption>00:29 ventanal</figcaption></figure>
+    <figure><img src="img/pt4_0800.jpg" alt="Vista del balcón al mar"><figcaption>00:33 balcón</figcaption></figure>
+    <figure><img src="img/pt4_0960.jpg" alt="Final con el mar y las nubes"><figcaption>00:40 final</figcaption></figure>
+  </div>
+</section>
+
+<section aria-labelledby="how">
+  <h2 id="how">Cómo se hizo</h2>
+  <div class="pipe">
+    <div><span class="n">01</span><b>Fotos + plano</b><p>7 fotos y el plano 1:20. Cada foto se volvió una cámara para comparar render contra realidad.</p></div>
+    <div><span class="n">02</span><b>Código en Blender</b><p>Python que construye muros, muebles y materiales (OpenHouse 3D). Nada se dibuja a mano.</p></div>
+    <div><span class="n">03</span><b>Juez independiente</b><p>Otro modelo de IA califica cada versión contra las fotos; sus críticas se verifican antes de corregir.</p></div>
+    <div><span class="n">04</span><b>Unreal Engine 5.8</b><p>El modelo horneado a GLB entra por scripts: luces, cielo, mar, modelos de Fab y la cámara.</p></div>
+    <div><span class="n">05</span><b>Path Tracer</b><p>Render en la RTX como tarea programada, denoiser de Intel y ffmpeg al MP4.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="audit">
+  <h2 id="audit">La auditoría honesta</h2>
+  <p class="lede">Al final, un modelo independiente revisó el video contra las fotos reales. Esto dijo:</p>
+  <div class="audit">
+    <div class="score"><span class="mono">Realismo fotográfico</span><div class="num">3,5 <small>/ 10</small></div><div class="meter"><i style="width:35%"></i></div><p>Los interiores con sol llegan a 5: "archviz decente". El exterior baja la nota.</p></div>
+    <div class="score"><span class="mono">Fiel al apartamento</span><div class="num">4,5 <small>/ 10</small></div><div class="meter"><i style="width:45%"></i></div><p>Acierta en distribución, baño, cama y cuadros. Falla en la vista del balcón y en el sofá.</p></div>
+    <div class="score"><span class="mono">Estilo de la referencia</span><div class="num">4 <small>/ 10</small></div><div class="meter"><i style="width:40%"></i></div><p>Comparte el tono dorado y el plano secuencia; le falta utilería y luz más difusa.</p></div>
+  </div>
+  <h3>Lo siguiente para subir la nota</h3>
+  <ol class="next">
+    <li>Vista real del balcón: el parqueo gris y el mar lejano, sin palmeras inventadas.</li>
+    <li>Sofá de tela gris y silla de oficina de malla, como en las fotos.</li>
+    <li>Gradación más neutra para que las paredes se vean blancas.</li>
+    <li>Telas con pliegues, más objetos en la cocina y gabinetes con brillo.</li>
+  </ol>
+</section>
+
+<section aria-labelledby="learn">
+  <h2 id="learn">Lo que aprendimos</h2>
+  <div class="lessons">
+    <div class="lesson"><h3>Comparar siempre con la foto</h3><p>Cada mejora real salió de poner render y foto lado a lado desde la misma cámara.</p></div>
+    <div class="lesson"><h3>El dueño ve lo que la IA no</h3><p>La pared inventada del balcón, el color del piso exterior y la posición de la regadera los detectó una persona.</p></div>
+    <div class="lesson"><h3>No inventar el entorno</h3><p>Las palmeras se ven bonitas pero bajan la fidelidad: un huésped espera ver lo que va a encontrar.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p class="mono">Blender 5.2 · OpenHouse 3D · Unreal Engine 5.8 · Path Tracer + OIDN · RTX 5060 Ti 16 GB · Claude Code</p>
+  <p>Modelos de Fab: sofá (L3XOR), palmera (Next Spring, CC BY 4.0), carros (HikobaeNET, MMCWorks). Cielo HDR de Poly Haven (CC0).</p>
+</footer>
+
+</div>
+</body>
+</html>
