@@ -48,6 +48,12 @@ header { padding: 48px 0 0; display: grid; gap: 24px; }
 .spec b { font-family: var(--display); font-size: 1.9rem; font-weight: 700; color: var(--sun); font-variant-numeric: tabular-nums; line-height: 1; }
 .spec span { color: var(--muted); font-size: 0.88rem; }
 .specs.four { grid-template-columns: repeat(4, 1fr); }
+.timeline.four { grid-template-columns: repeat(4, 1fr); }
+.mejoras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.mejora { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.mejora .n { font-family: var(--mono); color: var(--sea); font-size: 0.78rem; }
+.mejora p { font-size: 0.9rem; color: var(--muted); }
+.mejora b.num { color: var(--sun); font-weight: 500; }
 
 /* evolution */
 .timeline { display: grid; gap: 16px; grid-template-columns: repeat(5, 1fr); }
@@ -128,6 +134,8 @@ footer p { color: var(--muted); font-size: 0.9rem; }
 @media (max-width: 900px) {
   .hero-grid, .fix { grid-template-columns: 1fr; }
   .specs.four { grid-template-columns: 1fr 1fr; }
+  .timeline.four { grid-template-columns: repeat(2, 1fr); }
+  .mejoras { grid-template-columns: 1fr 1fr; }
   .timeline { grid-template-columns: repeat(2, 1fr); }
   .strip { grid-template-columns: repeat(2, 1fr); }
   .pipe { grid-template-columns: 1fr; }
@@ -137,7 +145,7 @@ footer p { color: var(--muted); font-size: 0.9rem; }
   .next { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-  .timeline, .vids { grid-template-columns: 1fr; }
+  .timeline, .timeline.four, .vids, .mejoras { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
 </style>
@@ -312,14 +320,62 @@ footer p { color: var(--muted); font-size: 0.9rem; }
 
 <section aria-labelledby="medir">
   <h2 id="medir">Etapa 2: medir contra las fotos, no mirar</h2>
-  <p class="lede">Después de la auditoría, cada cambio se mide. Escala, cámaras, color y luz de cada foto salen de cálculos, y el color se compara objeto por objeto en CIELAB. Se usa el dE: menos de 5 es casi igual, más de 10 ya es otro color. Esta página muestra solo los renders; las fotos del anuncio quedan privadas.</p>
+  <p class="lede">La auditoría dejó claro que mirar no alcanzaba. En esta etapa cada cambio se mide contra las fotos del anuncio: escala, cámaras, color y luz salen de cálculos, y el color se compara objeto por objeto en CIELAB. La medida es el dE: menos de 5 es casi igual, más de 10 ya es otro color. La página muestra solo renders; las fotos del anuncio quedan privadas.</p>
+  <h3>La misma cámara, cuatro momentos</h3>
+  <div class="bar" aria-hidden="true"></div>
+  <div class="timeline four">
+    <div class="stage">
+      <figure><img src="img/m2_t1_codigo.jpg" alt="Cuarto con telas hechas por código: colcha lisa, cojines arrugados como papel, sofá de caja"></figure>
+      <div class="step"><span class="dot"></span><h3>6 nov · todo por código</h3></div>
+      <p>Cámara de venta nivelada y luz de estudio. Las telas por código se ven como papel o plástico.</p>
+    </div>
+    <div class="stage">
+      <figure><img src="img/m2_t2_biblio.jpg" alt="Cuarto con ropa de cama, cortinas y cojines de biblioteca profesional"></figure>
+      <div class="step"><span class="dot"></span><h3>6 nov · modelos profesionales</h3></div>
+      <p>Ropa de cama, cortinas, cojines y materiales del sofá de BlenderKit. El exterior seguía siendo un plano verde.</p>
+    </div>
+    <div class="stage">
+      <figure><img src="img/m2_t3_cielo.jpg" alt="Cuarto con cielo con nubes y edificio de parqueo detrás de la ventana"></figure>
+      <div class="step"><span class="dot"></span><h3>8 nov · el exterior real</h3></div>
+      <p>Parqueo de dos niveles con autos, pasto oliva y cielo con nubes en vez de palmeras inventadas.</p>
+    </div>
+    <div class="stage final">
+      <figure><img src="img/m2_t4_hoy.jpg" alt="Cuarto actual: cama de 1,20 con colcha acolchada blanca, camino azul, toalla en moño y sofá cama extendido con manta"></figure>
+      <div class="step"><span class="dot"></span><h3>13 nov · medido contra las fotos</h3></div>
+      <p>Cama de 1,20 como la real, montaje de la foto, sofá cama extendido, manta de tela y luz medida.</p>
+    </div>
+  </div>
   <div class="specs four">
     <div class="spec"><b>0</b><span>fallos en la validación automática (medidas, choques, objetos flotando)</span></div>
     <div class="spec"><b>2,72 m</b><span>altura de techo, resuelta por las baldosas de 60×60</span></div>
     <div class="spec"><b>13,8</b><span>dE medio en la vista del cuarto (era 18,4)</span></div>
     <div class="spec"><b>8,7</b><span>dE medio en la vista de la cama (era 11,9)</span></div>
   </div>
+  <h3>Todo lo que se mejoró en esta etapa</h3>
+  <div class="mejoras">
+    <div class="mejora"><span class="n">01 · Validación sin render</span><h3>Un revisor automático</h3><p>Arma la escena y revisa en 10 s medidas contra el plano, objetos flotando, choques y piezas dentro de las paredes. Pasó de <b class="num">14 fallas a 0</b>. Encontró cosas que nadie veía: un cojín 40 cm dentro de la pared, la barra de la cortina metida en el techo, el colchón dentro del cabecero.</p></div>
+    <div class="mejora"><span class="n">02 · Cámaras medidas</span><h3>Cada foto, su cámara exacta</h3><p>La posición y la lente de cada foto se calculan con las juntas del piso (puntos de fuga, error de 0,5 px), con GeoCalib y con puntos conocidos (PnP). Antes se ubicaban a ojo. La foto 1 tenía la cámara 4° ladeada y 22 cm más baja de lo supuesto.</p></div>
+    <div class="mejora"><span class="n">03 · Escala</span><h3>Medida con las baldosas</h3><p>Las baldosas de 60×60 sirven de regla: el techo mide <b class="num">2,72 m</b> (se suponía 2,50) y la cama es de <b class="num">1,20</b>, no de 1,40. Así las alturas y proporciones calzan en todas las fotos.</p></div>
+    <div class="mejora"><span class="n">04 · Fidelidad</span><h3>Lo que estaba mal ubicado</h3><p>El ventanal no va de muro a muro: deja 86 cm de pared a un lado. Además, la persiana baja menos, la alfombra es la mitad de grande y la mesa de noche estaba 27 cm corrida. Todo salió de comparar siluetas, no de mirar.</p></div>
+    <div class="mejora"><span class="n">05 · Sofá</span><h3>Era un sofá cama abierto</h3><p>Ajustando su silueta, el sofá resultó tener 1,40 m de fondo y no 0,92: en la foto está extendido. Además brillaba con luz propia por un error del material descargado. Los colores ahora salen de medir la foto.</p></div>
+    <div class="mejora"><span class="n">06 · Cama</span><h3>Armada como en la foto</h3><p>Colcha acolchada con costuras a lo largo, doblada en diagonal sobre una sábana caqui, toalla enrollada en moño, almohadas con costura y cojines azules recostados que se hunden en la cama.</p></div>
+    <div class="mejora"><span class="n">07 · Luz</span><h3>Resuelta con cuentas</h3><p>Cada lámpara se renderiza por separado y la mezcla se calcula contra la foto. Hallazgo: las luces de estudio aportaban el 60 % de la luz y el cuarto real no tiene ninguna. Se quitaron, y el dE de la vista de la cama bajó de <b class="num">11,9 a 8,1</b>.</p></div>
+    <div class="mejora"><span class="n">08 · Color</span><h3>Objeto por objeto</h3><p>Cada mueble y cada tela se compara en color con la foto, con un mapa que dice qué píxel es qué objeto. Vista del cuarto: dE <b class="num">18,4 → 13,8</b>. Vista de la cama: <b class="num">11,9 → 8,7</b>.</p></div>
+    <div class="mejora"><span class="n">09 · Textura</span><h3>Imperfecciones medidas</h3><p>Se midió cuánta variación tiene cada tela en la foto, por tamaño de detalle. Igualarla con ruido dejó manchas de humedad: la cifra dice cuánto, no qué forma. Las telas quedaron con grano fino y el relieve sale de costuras y pliegues.</p></div>
+    <div class="mejora"><span class="n">10 · Exterior</span><h3>Lo que se ve de verdad</h3><p>Pasto oliva con manchas, parqueo de dos niveles con autos, bruma hacia el horizonte y nubes visibles: la cámara ve el cielo al 55 % de la fuerza con que ilumina, así no se quema.</p></div>
+    <div class="mejora"><span class="n">11 · Telas</span><h3>Manta y cojines (lo último)</h3><p>La manta del sofá cae con simulación de tela (dE <b class="num">9,2 → 2,6</b>) y los cojines tienen el pliegue de la funda. Abajo, el antes y después.</p></div>
+    <div class="mejora"><span class="n">12 · Probado y descartado</span><h3>No todo funcionó</h3><p>Fallaron el sofá generado por IA a partir de una foto del producto (salió deformado) y los focos de cono angosto para explicar un piso naranja. También la curva de color del celular. Quedan anotados para no repetirlos.</p></div>
+  </div>
+  <h3>Telas: antes y después</h3>
   <div class="fixes">
+    <div class="fix">
+      <figure><span class="tag before">6 nov</span><img src="img/m2_cama_t1.jpg" alt="Cama con telas por código: almohadas y cojines arrugados como papel"></figure>
+      <figure><span class="tag after">13 nov</span><img src="img/m2_cama_t4.jpg" alt="Cama de 1,20 con colcha acolchada, camino estampado, toalla en moño y cojines azules"></figure>
+      <div class="txt">
+        <h3>La cama, de inventada a la de la foto</h3>
+        <p>Misma cámara de venta. Antes eran telas por código, que parecían papel arrugado. Ahora la cama mide 1,20 como la real y tiene la colcha acolchada, el camino estampado, la toalla en moño y los cojines de las fotos del anuncio.</p>
+      </div>
+    </div>
     <div class="fix">
       <figure><span class="tag before">Antes</span><img src="img/m2_manta_v0.jpg" alt="Manta del sofá como lámina rígida que baja recta hasta el piso"></figure>
       <figure><span class="tag after">Después</span><img src="img/m2_manta_v2.jpg" alt="Manta del sofá caída por simulación de tela, con ondas y la esquina colgando"></figure>
