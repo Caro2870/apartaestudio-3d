@@ -400,6 +400,34 @@ footer p { color: var(--muted); font-size: 0.9rem; }
   </div>
 </section>
 
+<section aria-labelledby="ab">
+  <h2 id="ab">Demo A/B: cambiar un acabado es cambiar un código</h2>
+  <p class="lede">Lo que pide una inmobiliaria: cuando un acabado se descontinúa a mitad del proyecto, el render nuevo no debería costar otro encargo al estudio. Aquí cada proyecto tiene una ficha con un código de catálogo por lugar (piso, pared de cocina). Se cambia el código, se vuelven a renderizar las mismas cámaras y en unos minutos están las imágenes nuevas.</p>
+  <div class="fixes">
+    <div class="fix">
+      <figure><span class="tag before">Ficha A</span><img src="img/ab_ficha_a_cocina.jpg" alt="Cocina con pared de cerámica blanca de 30x60 con juntas visibles"></figure>
+      <figure><span class="tag after">Ficha B</span><img src="img/ab_ficha_b_cocina.jpg" alt="Cocina con pared de cerámica negra brillante de 30x60"></figure>
+      <div class="txt">
+        <h3>Cocina: pared blanca o negra</h3>
+        <p>Misma cocina y misma cámara. Solo cambió el código de la pared: <span class="mono">110017507</span> (Tropic New II White, 30×60) por <span class="mono">110017429</span> (Brick New Black, 30×60). Las piezas salen a su tamaño real, con juntas y el brillo del esmalte.</p>
+      </div>
+    </div>
+    <div class="fix">
+      <figure><span class="tag before">Ficha A</span><img src="img/ab_ficha_a_cuarto.jpg" alt="Cuarto con piso de porcelanato símil madera en piezas de 60x60"></figure>
+      <figure><span class="tag after">Ficha B</span><img src="img/ab_ficha_b_cuarto.jpg" alt="Cuarto con piso de porcelanato gris concreto en piezas de 60x60"></figure>
+      <div class="txt">
+        <h3>Cuarto: madera o concreto</h3>
+        <p>El piso pasa de <span class="mono">110015675</span> (Madera Fashion Cerezo Beige, 60×60) a <span class="mono">110012936</span> (Concreto Gris, 60×60). El símil madera se arma en piezas de 60×60 con juntas, como el porcelanato real, y no como un piso de tablas.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lessons">
+    <div class="lesson"><h3>La ficha es un archivo de dos líneas</h3><p><span class="mono">{"piso": "110012936", "cocina_pared": "110017429"}</span>. Cambiar un acabado descontinuado es editar ese código; el modelo, la luz y las cámaras no se tocan.</p></div>
+    <div class="lesson"><h3>Texturas propias, colores del catálogo</h3><p>No se usan imágenes del fabricante: son texturas libres (CC0) teñidas al color del muestrario y a la medida real de cada pieza. Para entregar a un cliente se piden las texturas oficiales al fabricante.</p></div>
+    <div class="lesson"><h3>Lo que falta</h3><p>Confirmar los códigos contra la ficha técnica de cada producto (solo uno está confirmado), sumar los precios por m² para compras y llevar la elección a una página con selector.</p></div>
+  </div>
+</section>
+
 <section aria-labelledby="learn">
   <h2 id="learn">Lo que aprendimos</h2>
   <div class="lessons">
