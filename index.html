@@ -47,6 +47,7 @@ header { padding: 48px 0 0; display: grid; gap: 24px; }
 .spec { background: var(--panel); padding: 16px; display: grid; gap: 4px; }
 .spec b { font-family: var(--display); font-size: 1.9rem; font-weight: 700; color: var(--sun); font-variant-numeric: tabular-nums; line-height: 1; }
 .spec span { color: var(--muted); font-size: 0.88rem; }
+.specs.four { grid-template-columns: repeat(4, 1fr); }
 
 /* evolution */
 .timeline { display: grid; gap: 16px; grid-template-columns: repeat(5, 1fr); }
@@ -126,6 +127,7 @@ footer p { color: var(--muted); font-size: 0.9rem; }
 
 @media (max-width: 900px) {
   .hero-grid, .fix { grid-template-columns: 1fr; }
+  .specs.four { grid-template-columns: 1fr 1fr; }
   .timeline { grid-template-columns: repeat(2, 1fr); }
   .strip { grid-template-columns: repeat(2, 1fr); }
   .pipe { grid-template-columns: 1fr; }
@@ -306,6 +308,40 @@ footer p { color: var(--muted); font-size: 0.9rem; }
     <li>Gradación más neutra para que las paredes se vean blancas.</li>
     <li>Telas con pliegues, más objetos en la cocina y gabinetes con brillo.</li>
   </ol>
+</section>
+
+<section aria-labelledby="medir">
+  <h2 id="medir">Etapa 2: medir contra las fotos, no mirar</h2>
+  <p class="lede">Después de la auditoría, cada cambio se mide. Escala, cámaras, color y luz de cada foto salen de cálculos, y el color se compara objeto por objeto en CIELAB. Se usa el dE: menos de 5 es casi igual, más de 10 ya es otro color. Esta página muestra solo los renders; las fotos del anuncio quedan privadas.</p>
+  <div class="specs four">
+    <div class="spec"><b>0</b><span>fallos en la validación automática (medidas, choques, objetos flotando)</span></div>
+    <div class="spec"><b>2,72 m</b><span>altura de techo, resuelta por las baldosas de 60×60</span></div>
+    <div class="spec"><b>13,8</b><span>dE medio en la vista del cuarto (era 18,4)</span></div>
+    <div class="spec"><b>8,7</b><span>dE medio en la vista de la cama (era 11,9)</span></div>
+  </div>
+  <div class="fixes">
+    <div class="fix">
+      <figure><span class="tag before">Antes</span><img src="img/m2_manta_v0.jpg" alt="Manta del sofá como lámina rígida que baja recta hasta el piso"></figure>
+      <figure><span class="tag after">Después</span><img src="img/m2_manta_v2.jpg" alt="Manta del sofá caída por simulación de tela, con ondas y la esquina colgando"></figure>
+      <div class="txt">
+        <h3>La manta era una tabla</h3>
+        <p>Tenía una forma calculada a mano: borde recto y caída rígida. Ahora la deja caer un simulador de tela sobre cajas invisibles con la forma del sofá. El primer intento se resbaló entero al piso; sujetar la franja de atrás, como hace el roce de una manta real, lo resolvió. Color contra la foto: dE 9,2 &rarr; 2,6.</p>
+      </div>
+    </div>
+    <div class="fix">
+      <figure><span class="tag before">Antes</span><img src="img/m2_cojines_v0.jpg" alt="Cojines azules lisos, como almohadas infladas"></figure>
+      <figure><span class="tag after">Después</span><img src="img/m2_cojines_v2.jpg" alt="Cojines azules con un pliegue diagonal donde se dobla el relleno"></figure>
+      <div class="txt">
+        <h3>Cojines sin pliegue</h3>
+        <p>El relieve estaba, pero tan suave que no se veía a esa distancia. Se duplicaron las abolladuras y se agregó el pliegue diagonal que forma la funda cuando el relleno se dobla. Todavía es más sutil que en la foto.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lessons">
+    <div class="lesson"><h3>Una hipótesis descartada con números</h3><p>En una foto el piso sale mucho más naranja que en el modelo y las paredes no. Se probó con focos de cono angosto y con la curva de color del celular: ninguna mezcla de luces lo explica sin empeorar otra cosa, y en la otra foto ese mismo piso calza. Se dejó como está.</p></div>
+    <div class="lesson"><h3>La estadística dice cuánto, no qué forma</h3><p>Igualar la "cantidad de textura" de las telas con ruido aleatorio dejó manchas de humedad. Los pliegues tienen que salir de la forma, no del ruido.</p></div>
+    <div class="lesson"><h3>Modelos profesionales para lo blando</h3><p>Ropa de cama, cortinas, plantas y decoración vienen de bibliotecas con licencia (BlenderKit y Poly Haven). El código queda para lo que manda el plano.</p></div>
+  </div>
 </section>
 
 <section aria-labelledby="learn">
