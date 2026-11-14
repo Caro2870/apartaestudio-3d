@@ -54,6 +54,28 @@ header { padding: 48px 0 0; display: grid; gap: 24px; }
 .mejora .n { font-family: var(--mono); color: var(--sea); font-size: 0.78rem; }
 .mejora p { font-size: 0.9rem; color: var(--muted); }
 .mejora b.num { color: var(--sun); font-weight: 500; }
+.formulas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.formula { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; align-content: start; }
+.formula .n { font-family: var(--mono); color: var(--sea); font-size: 0.78rem; }
+.formula p { font-size: 0.9rem; color: var(--muted); }
+.eq { font-family: var(--mono); font-size: 0.86rem; color: var(--text); background: #0d1214; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: normal; line-height: 1.7; }
+.eq var { font-style: italic; color: var(--sun); }
+.res { font-size: 0.88rem; }
+.res b { color: var(--sun); font-weight: 500; }
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; position: relative; }
+.chart svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.85rem; color: var(--muted); }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.tip { position: absolute; pointer-events: none; background: #0d1214; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 0.82rem; color: var(--text); max-width: 260px; display: none; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.sw { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 6px; }
+.sw .pair { display: grid; grid-template-columns: 1fr 1fr; height: 44px; border-radius: 6px; overflow: hidden; }
+.sw .pair span { display: block; }
+.sw b { font-weight: 500; font-size: 0.9rem; }
+.sw small { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; }
+details.tabla summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+details.tabla table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; }
+details.tabla td, details.tabla th { border-bottom: 1px solid var(--line); padding: 6px; text-align: left; font-variant-numeric: tabular-nums; }
 
 /* evolution */
 .timeline { display: grid; gap: 16px; grid-template-columns: repeat(5, 1fr); }
@@ -136,6 +158,7 @@ footer p { color: var(--muted); font-size: 0.9rem; }
   .specs.four { grid-template-columns: 1fr 1fr; }
   .timeline.four { grid-template-columns: repeat(2, 1fr); }
   .mejoras { grid-template-columns: 1fr 1fr; }
+  .formulas { grid-template-columns: 1fr; }
   .timeline { grid-template-columns: repeat(2, 1fr); }
   .strip { grid-template-columns: repeat(2, 1fr); }
   .pipe { grid-template-columns: 1fr; }
@@ -399,6 +422,121 @@ footer p { color: var(--muted); font-size: 0.9rem; }
     <div class="lesson"><h3>Modelos profesionales para lo blando</h3><p>Ropa de cama, cortinas, plantas y decoración vienen de bibliotecas con licencia (BlenderKit y Poly Haven). El código queda para lo que manda el plano.</p></div>
   </div>
 </section>
+
+<section aria-labelledby="formulas">
+  <h2 id="formulas">Las fórmulas detrás: forma y color</h2>
+  <p class="lede">Nada de esto se ajustó a ojo. La forma sale de geometría proyectiva y de ajustar siluetas; el color, de medir cada objeto en un espacio de color perceptual y resolver la luz como un sistema de ecuaciones. Cada fórmula de abajo es código que corre y deja un número.</p>
+
+  <h3>Forma</h3>
+  <div class="formulas">
+    <div class="formula"><span class="n">F1 · cámara por puntos de fuga</span><h3>Dónde estaba el celular</h3>
+      <div class="eq"><var>f</var>² = −(<var>v</var>₁ − <var>c</var>) · (<var>v</var>₂ − <var>c</var>)</div>
+      <p>Las juntas del piso, los rieles y los parantes son rectas paralelas en el cuarto; en la foto se cortan en tres puntos de fuga <var>v</var>. Como esas tres direcciones son perpendiculares, de ellas sale la lente <var>f</var>, el giro y la inclinación de la cámara. Control: el centro óptico calculado <var>c</var> cae a 10 px del centro de la foto.</p>
+      <p class="res">Ajuste de las rectas: <b>0,5 px</b> de error. Lente 14,5 mm, cámara ladeada <b>4,1°</b>.</p></div>
+    <div class="formula"><span class="n">F2 · escala por homografía del piso</span><h3>Las baldosas como regla</h3>
+      <div class="eq">[<var>u</var> <var>v</var> 1]ᵀ ∝ <var>H</var> · [<var>x</var> <var>y</var> 1]ᵀ</div>
+      <p>Una homografía <var>H</var> lleva la cuadrícula de juntas del piso a la foto. Con ella, cualquier punto del piso se mide en baldosas: de la pata de la cama a la pared hay 3,39 baldosas. Con una cama estándar de 2,0 m, la baldosa mide 0,59 m, es decir 60×60.</p>
+      <p class="res">Techo <b>2,72 m</b> (se suponía 2,50), cámara a <b>1,63 m</b>, cama de <b>1,20</b>.</p></div>
+    <div class="formula"><span class="n">F3 · siluetas</span><h3>Encajar cada mueble</h3>
+      <div class="eq">máx<sub>Δx, Δy, θ, s</sub> IoU = |<var>A</var> ∩ <var>B</var>| / |<var>A</var> ∪ <var>B</var>|</div>
+      <p>La silueta del mueble en el modelo (<var>A</var>) se mueve, gira y escala hasta superponerse lo más posible con su silueta en la foto (<var>B</var>), con el método de Nelder–Mead. Los píxeles de otro mueble que lo tapa no cuentan.</p>
+      <p class="res">Sofá IoU <b>0,75 → 0,93</b> (fondo 0,92 → 1,43 m: estaba extendido). Mesa de noche <b>0,70 → 0,96</b> (27 cm corrida).</p></div>
+    <div class="formula"><span class="n">F4 · relieve de los cojines</span><h3>Un cojín no es una almohada inflada</h3>
+      <div class="eq"><var>z</var> = <var>h</var> · ((1−<var>u</var>²)(1−<var>v</var>²))<sup>0,35</sup> · (1 + 0,30·<var>a</var> + 0,22·<var>e</var> + 0,28·<var>p</var>)</div>
+      <p>La forma base se hincha al centro y se hunde en las costuras. Encima van abolladuras anchas <var>a</var> (senos de baja frecuencia), arrugas en abanico desde cada esquina <var>e</var> = e<sup>−r/0,35</sup>·cos 6θ, y un pliegue diagonal <var>p</var> = −e<sup>−(d/0,09)²</sup> donde el relleno se dobla.</p>
+      <p class="res">Abolladuras de 16 % a <b>30 %</b> del grosor y pliegue nuevo: ya se leen a la distancia de la foto.</p></div>
+  </div>
+
+  <h3>Color</h3>
+  <div class="formulas">
+    <div class="formula"><span class="n">C1 · diferencia de color</span><h3>Cuánto se nota</h3>
+      <div class="eq">Δ<var>E</var> = √((<var>L</var>*<sub>f</sub> − <var>L</var>*<sub>r</sub>)² + (<var>a</var>*<sub>f</sub> − <var>a</var>*<sub>r</sub>)² + (<var>b</var>*<sub>f</sub> − <var>b</var>*<sub>r</sub>)²)</div>
+      <p>Cada objeto se compara en CIELAB, un espacio donde la distancia se parece a lo que percibe el ojo: mediana de la foto (<var>f</var>) contra mediana del render (<var>r</var>), con un mapa que dice qué píxel es qué objeto.</p>
+      <p class="res">Menos de 5: casi igual. De 5 a 10: se nota. Más de 10: otro color.</p></div>
+    <div class="formula"><span class="n">C2 · corrección amortiguada</span><h3>Cómo se corrige un material</h3>
+      <div class="eq"><var>base</var>′ = <var>base</var> · (<var>foto</var> / <var>render</var>)<sup>0,8</sup></div>
+      <p>El factor por canal se mide en color lineal. El exponente 0,8 frena el paso: al cambiar un color cambia también la luz que rebota, y sin freno la corrección oscila en vez de converger. Converge en 2 o 3 pasadas.</p>
+      <p class="res">Manta del sofá: Δ<var>E</var> <b>9,2 → 2,6</b>.</p></div>
+    <div class="formula"><span class="n">C3 · luz como sistema lineal</span><h3>Cuánto aporta cada lámpara</h3>
+      <div class="eq"><var>I</var> = Σ<sub><var>g</var></sub> <var>w</var><sub><var>g</var></sub> · <var>t</var><sub><var>g</var></sub> · <var>I</var><sub><var>g</var></sub> &nbsp;·&nbsp; mín Σ<sub>obj</sub> √área · Δ<var>E</var></div>
+      <p>La imagen es lineal en las luces: se renderiza cada lámpara sola (<var>I</var><sub><var>g</var></sub>) y se resuelven sus pesos <var>w</var> y tintes <var>t</var> contra la foto por mínimos cuadrados, en segundos y sin volver a renderizar.</p>
+      <p class="res">Hallazgo: las luces de estudio eran el <b>60 %</b> de la luz y el cuarto real no tiene ninguna.</p></div>
+    <div class="formula"><span class="n">C4 · textura por bandas</span><h3>Cuánta imperfección le falta a cada tela</h3>
+      <div class="eq">σ<sub>falta</sub> = √(σ<sub>foto</sub>² − σ<sub>render</sub>² − σ<sub>cámara</sub>²)</div>
+      <p>Para cada tamaño de detalle (2, 4, 8, 16 px) se mide la variación de cada objeto con una dispersión robusta (MAD), y se descuenta el ruido del celular medido en el techo liso. Lo que falta se agrega como relieve.</p>
+      <p class="res">Paredes y techo no necesitaban textura; colcha, piso y cojines eran <b>5 a 10 veces</b> más lisos que en la foto.</p></div>
+  </div>
+
+  <h3>Cómo bajó la diferencia de color, paso a paso</h3>
+  <div class="chart" id="chart-de">
+    <div class="legend" aria-hidden="true"><span><i style="background:#c2852c"></i>Vista del cuarto (foto 1)</span><span><i style="background:#20907f"></i>Vista de la cama (foto 5)</span></div>
+    <svg viewBox="0 0 760 300" role="img" aria-labelledby="chart-de-t"><title id="chart-de-t">Diferencia de color media (ΔE) por paso: foto 1 de 18,4 a 13,8; foto 5 de 11,9 a 8,7</title></svg>
+    <div class="tip" role="status"></div>
+    <p class="mono">1 inicio, luz de estudio · 2 mezcla lineal de luces · 3 luz física + exposición · 4 sofá medido · 5 cojines y almohadas · 6 manta de tela</p>
+    <details class="tabla"><summary>Ver como tabla</summary>
+      <table><thead><tr><th>Paso</th><th>Foto 1</th><th>Foto 5</th></tr></thead><tbody id="chart-de-tabla"></tbody></table></details>
+    <p class="mono">La subida de 8,1 a 8,7 en la foto 5 no es un color peor: al mover cojines y almohadas, sus regiones en el mapa cayeron sobre otros objetos de la foto.</p>
+  </div>
+
+  <h3>Muestras de color: foto contra render (vista de la cama)</h3>
+  <p class="mono">Mitad izquierda: color medio del objeto en la foto. Mitad derecha: en el render. Solo colores promedio, sin la foto.</p>
+  <div class="swatches">
+    <div class="sw"><div class="pair"><span style="background:#9b9886"></span><span style="background:#92907b"></span></div><b>Paredes</b><small>ΔE 3,8</small></div>
+    <div class="sw"><div class="pair"><span style="background:#8e8f7f"></span><span style="background:#8b8d76"></span></div><b>Techo</b><small>ΔE 4,4</small></div>
+    <div class="sw"><div class="pair"><span style="background:#737260"></span><span style="background:#79765d"></span></div><b>Persiana</b><small>ΔE 4,6</small></div>
+    <div class="sw"><div class="pair"><span style="background:#6b6451"></span><span style="background:#7a715a"></span></div><b>Cabecero</b><small>ΔE 5,7</small></div>
+    <div class="sw"><div class="pair"><span style="background:#8f8574"></span><span style="background:#7c7967"></span></div><b>Piso</b><small>ΔE 6,1</small></div>
+    <div class="sw"><div class="pair"><span style="background:#403827"></span><span style="background:#504838"></span></div><b>Mesa de noche</b><small>ΔE 7,1</small></div>
+    <div class="sw"><div class="pair"><span style="background:#5b503a"></span><span style="background:#665333"></span></div><b>Tapete</b><small>ΔE 7,4</small></div>
+    <div class="sw"><div class="pair"><span style="background:#8e8472"></span><span style="background:#a2a194"></span></div><b>Colcha</b><small>ΔE 11,4 · en la foto se ve también la sábana</small></div>
+    <div class="sw"><div class="pair"><span style="background:#a29b89"></span><span style="background:#8e7f5b"></span></div><b>Base de la cama</b><small>ΔE 15,3</small></div>
+    <div class="sw"><div class="pair"><span style="background:#c5a789"></span><span style="background:#c6ac90"></span></div><b>Manta del sofá</b><small>ΔE 2,6 · vista del cuarto</small></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const pasos = [
+    ["Inicio (luz de estudio)", 18.4, 11.9, "Luces de relleno de estudio que el cuarto real no tiene."],
+    ["Mezcla lineal de luces", 16.4, 9.0, "Pesos y tintes de cada grupo de luces resueltos contra la foto."],
+    ["Luz física + exposición", 14.1, 8.1, "Solo las luces que existen, focos cálidos, un balance de blancos; el factor común pasa a la exposición."],
+    ["Sofá medido", 14.0, 8.1, "Color y tamaño del sofá por silueta y CIELAB."],
+    ["Cojines y almohadas", 14.1, 8.7, "Cojines y almohadas movidos a su lugar; el mapa de regiones se rehízo."],
+    ["Manta de tela", 13.8, 8.7, "Manta del sofá por simulación de tela."],
+  ];
+  const S = [["Foto 1", 1, "#c2852c"], ["Foto 5", 2, "#20907f"]];
+  const box = document.getElementById("chart-de"), svg = box.querySelector("svg"), tip = box.querySelector(".tip");
+  const W = 760, H = 300, L = 44, R = 120, T = 30, B = 40, y0 = 6, y1 = 20;
+  const X = i => L + i * (W - L - R) / (pasos.length - 1), Y = v => T + (y1 - v) / (y1 - y0) * (H - T - B);
+  const ns = "http://www.w3.org/2000/svg", el = (n, a) => { const e = document.createElementNS(ns, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  for (let v = y0; v <= y1; v += 2) {
+    svg.append(el("line", {x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "#24312f", "stroke-width": 1}));
+    const t = el("text", {x: L - 8, y: Y(v) + 4, "text-anchor": "end", fill: "#9aa5a1", "font-size": 12}); t.textContent = v; svg.append(t);
+  }
+  const yl = el("text", {x: L - 8, y: 14, "text-anchor": "end", fill: "#9aa5a1", "font-size": 12}); yl.textContent = "ΔE"; svg.append(yl);
+  pasos.forEach((p, i) => { const t = el("text", {x: X(i), y: H - 12, "text-anchor": "middle", fill: "#9aa5a1", "font-size": 11}); t.textContent = (i + 1); svg.append(t); });
+  for (const [nom, k, col] of S) {
+    svg.append(el("polyline", {points: pasos.map((p, i) => `${X(i)},${Y(p[k])}`).join(" "), fill: "none", stroke: col, "stroke-width": 2, "stroke-linejoin": "round"}));
+    pasos.forEach((p, i) => svg.append(el("circle", {cx: X(i), cy: Y(p[k]), r: 4.5, fill: col, stroke: "#151d20", "stroke-width": 2})));
+    const last = pasos[pasos.length - 1][k], f = pasos[0][k];
+    const t = el("text", {x: W - R + 10, y: Y(last) + 4, fill: "#e9e4da", "font-size": 12}); t.textContent = `${nom}: ${String(f).replace(".", ",")} → ${String(last).replace(".", ",")}`; svg.append(t);
+  }
+  const guide = el("line", {y1: T, y2: H - B, stroke: "#9aa5a1", "stroke-width": 1, "stroke-dasharray": "3 3", visibility: "hidden"}); svg.append(guide);
+  const hit = el("rect", {x: L - 20, y: T, width: W - L - R + 40, height: H - T - B, fill: "transparent"}); svg.append(hit);
+  const fmt = v => String(v).replace(".", ",");
+  hit.addEventListener("pointermove", e => {
+    const r = svg.getBoundingClientRect(), sx = (e.clientX - r.left) * W / r.width;
+    const i = Math.max(0, Math.min(pasos.length - 1, Math.round((sx - L) / ((W - L - R) / (pasos.length - 1))))), p = pasos[i];
+    guide.setAttribute("x1", X(i)); guide.setAttribute("x2", X(i)); guide.setAttribute("visibility", "visible");
+    tip.innerHTML = `<b>${i + 1} · ${p[0]}</b><br>Foto 1: ΔE ${fmt(p[1])} · Foto 5: ΔE ${fmt(p[2])}<br><span style="color:#9aa5a1">${p[3]}</span>`;
+    tip.style.display = "block";
+    const bx = box.getBoundingClientRect(), px = e.clientX - bx.left;
+    tip.style.left = Math.min(px + 14, bx.width - 270) + "px"; tip.style.top = (e.clientY - bx.top + 14) + "px";
+  });
+  hit.addEventListener("pointerleave", () => { tip.style.display = "none"; guide.setAttribute("visibility", "hidden"); });
+  document.getElementById("chart-de-tabla").innerHTML = pasos.map((p, i) => `<tr><td>${i + 1} · ${p[0]}</td><td>${fmt(p[1])}</td><td>${fmt(p[2])}</td></tr>`).join("");
+})();
+</script>
 
 <section aria-labelledby="ab">
   <h2 id="ab">Demo A/B: cambiar un acabado es cambiar un código</h2>
